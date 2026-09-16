@@ -1,3 +1,4 @@
 # Never publish: outreach drafts + lead CSVs contain real business data
 scout/out/
 *.csv
+__pycache__/
