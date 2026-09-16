@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>You're in — what happens next</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#FAF8F4; --ink:#191713; --muted:#6B655B; --border:#DDD8CC;
+    --accent:#1D5C3F; --accent-ink:#F4F9F5; --accent-soft:#E4EFE8;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--bg);color:var(--ink);font-family:'Space Grotesk',sans-serif;font-size:17px;line-height:1.6;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
+  .card{max-width:560px;width:100%}
+  .check{width:52px;height:52px;border-radius:50%;background:var(--accent-soft);display:flex;align-items:center;justify-content:center;font-size:26px;color:var(--accent);margin-bottom:28px}
+  h1{font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(32px,5vw,44px);line-height:1.1;margin-bottom:16px}
+  h1 em{font-style:italic;color:var(--accent)}
+  p{color:var(--muted);margin-bottom:16px}
+  .email{font-weight:600;color:var(--ink)}
+  ol{margin:8px 0 28px 0;padding-left:0;list-style:none}
+  ol li{display:flex;gap:14px;padding:12px 0;border-bottom:1px solid var(--border);font-size:15.5px;color:var(--ink)}
+  ol li:last-child{border-bottom:none}
+  ol li b{color:var(--accent);font-family:'Instrument Serif',serif;font-size:20px;line-height:1.3}
+  .btn{display:block;text-align:center;padding:16px;border-radius:10px;background:var(--accent);color:var(--accent-ink);font-weight:600;text-decoration:none;transition:background .2s}
+  .btn:hover{background:#174A33}
+  .micro{font-size:13.5px;text-align:center;margin-top:14px}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="check">✓</div>
+  <h1>You're in. Check your inbox, <em><span id="email">you</span>.</em></h1>
+  <p>Here's exactly what happens next:</p>
+  <ol>
+    <li><b>1</b><span>I've just sent you an email with the details — including the link to claim your <strong>free 10-point site audit</strong>. Whitelist <span class="email">hello@yourdomain.com</span> so it doesn't hit spam.</span></li>
+    <li><b>2</b><span>Hit reply with your current site URL (or a competitor's). Your audit lands within 48 hours.</span></li>
+    <li><b>3</b><span>Like what you see? Book the 15-minute scoping call and get a fixed quote in writing.</span></li>
+  </ol>
+  <a class="btn" href="#" data-booking>Book your 15-min scoping call →</a>
+  <p class="micro">No pitch, no pressure — worst case you leave the call with a free plan and a number.</p>
+</div>
+<script>
+  // Show the email they signed up with; swap the booking href once set (see README)
+  const params = new URLSearchParams(location.search);
+  const email = params.get("email");
+  if (email) document.getElementById("email").textContent = email;
+  const BOOKING_URL = ""; // e.g. "https://cal.com/yourname/15min"
+  if (BOOKING_URL) document.querySelector("[data-booking]").href = BOOKING_URL;
+</script>
+</body>
+</html>

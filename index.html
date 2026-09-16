@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kyle Monk — Web apps, built fast. Agency quality, without the agency.</title>
+<meta name="description" content="Agency-grade websites and web apps built in days, not months. See the work, book a free 15-minute scoping call.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#FAF8F4;
+    --surface:#F1EEE6;
+    --ink:#191713;
+    --muted:#6B655B;
+    --border:#DDD8CC;
+    --accent:#1D5C3F;
+    --accent-ink:#F4F9F5;
+    --accent-soft:#E4EFE8;
+    --radius:14px;
+    --font-display:'Instrument Serif', Georgia, serif;
+    --font-body:'Space Grotesk', 'Helvetica Neue', sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+  h1,h2,h3{font-family:var(--font-display);font-weight:400;letter-spacing:-0.01em;text-wrap:balance}
+  a{color:inherit}
+  .eyebrow{font-size:13px;letter-spacing:0.14em;text-transform:uppercase;color:var(--accent);font-weight:600}
+
+  /* Nav */
+  nav{position:sticky;top:0;z-index:50;background:rgba(250,248,244,0.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--border)}
+  .nav-inner{display:flex;align-items:center;justify-content:space-between;padding:16px 24px;max-width:1080px;margin:0 auto}
+  .logo{font-family:var(--font-display);font-size:22px;text-decoration:none}
+  .logo em{color:var(--accent);font-style:italic}
+  .nav-cta{font-size:15px;font-weight:600;text-decoration:none;background:var(--ink);color:var(--bg);padding:10px 20px;border-radius:999px;transition:background .2s}
+  .nav-cta:hover{background:var(--accent)}
+
+  /* Hero */
+  .hero{padding:88px 0 72px;display:grid;grid-template-columns:1.25fr .75fr;gap:56px;align-items:end}
+  .hero h1{font-size:clamp(42px,6vw,68px);line-height:1.05;margin:20px 0 24px}
+  .hero h1 em{font-style:italic;color:var(--accent)}
+  .hero p.lede{font-size:19px;color:var(--muted);max-width:34em;margin-bottom:32px}
+  .signup{display:flex;gap:10px;max-width:460px}
+  .signup input{flex:1;min-width:0;padding:15px 18px;border:1.5px solid var(--border);border-radius:10px;font:inherit;background:#fff;transition:border-color .2s}
+  .signup input:focus{outline:none;border-color:var(--accent)}
+  .btn{padding:15px 26px;border:none;border-radius:10px;background:var(--accent);color:var(--accent-ink);font:inherit;font-weight:600;cursor:pointer;transition:transform .15s, background .2s;text-decoration:none;display:inline-block}
+  .btn:hover{background:#174A33;transform:translateY(-1px)}
+  .micro{font-size:13.5px;color:var(--muted);margin-top:12px}
+  .hero-side{border-left:1px solid var(--border);padding-left:40px}
+  .hero-side .stat{margin-bottom:26px}
+  .hero-side .stat b{display:block;font-family:var(--font-display);font-size:40px;font-weight:400;line-height:1;color:var(--ink)}
+  .hero-side .stat span{font-size:14px;color:var(--muted)}
+
+  /* Portfolio */
+  .portfolio{padding:72px 0;border-top:1px solid var(--border)}
+  .section-head{display:flex;align-items:baseline;justify-content:space-between;gap:24px;margin-bottom:36px;flex-wrap:wrap}
+  .section-head h2{font-size:clamp(30px,4vw,42px)}
+  .section-head p{color:var(--muted);max-width:26em}
+  .work-grid{display:grid;grid-template-columns:1.4fr 1fr;gap:20px}
+  .work{position:relative;border-radius:var(--radius);overflow:hidden;border:1px solid var(--border);background:var(--surface);text-decoration:none;display:block;transition:transform .2s}
+  .work:hover{transform:translateY(-3px)}
+  .work .thumb{aspect-ratio:16/10;background:linear-gradient(135deg,#E8E4D8,#D8D2C0);display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:14px;letter-spacing:.06em;text-transform:uppercase}
+  .work .meta{padding:18px 20px;background:#fff}
+  .work .meta b{display:block;font-size:17px;margin-bottom:2px}
+  .work .meta span{font-size:14px;color:var(--muted)}
+  .work.tall{grid-row:span 1}
+
+  /* Compare */
+  .compare{padding:72px 0;border-top:1px solid var(--border)}
+  table{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+  th,td{padding:16px 20px;text-align:left;font-size:15.5px;border-bottom:1px solid var(--border)}
+  tr:last-child td{border-bottom:none}
+  thead th{background:var(--surface);font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+  td.us{background:var(--accent-soft);font-weight:600}
+  col.hl{}
+
+  /* Process */
+  .process{padding:72px 0;border-top:1px solid var(--border)}
+  .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:0;counter-reset:step}
+  .step{padding:28px 32px 28px 0;border-top:2px solid var(--ink);counter-increment:step;position:relative}
+  .step + .step{padding-left:32px}
+  .step::before{content:counter(step,decimal-leading-zero);font-family:var(--font-display);font-size:19px;color:var(--accent);display:block;margin-bottom:14px}
+  .step h3{font-size:24px;margin-bottom:10px}
+  .step p{font-size:15.5px;color:var(--muted)}
+  .step .dur{font-size:13px;color:var(--accent);font-weight:600;letter-spacing:.08em;text-transform:uppercase;display:block;margin-top:14px}
+
+  /* Lead magnet */
+  .magnet{padding:72px 0;border-top:1px solid var(--border)}
+  .magnet-card{background:var(--ink);color:var(--bg);border-radius:20px;padding:56px;display:grid;grid-template-columns:1.2fr .8fr;gap:48px;align-items:center}
+  .magnet-card h2{font-size:clamp(28px,3.5vw,38px);margin:14px 0 16px}
+  .magnet-card h2 em{font-style:italic;color:#9CD3B4}
+  .magnet-card p{color:#B9B4A8;font-size:16.5px}
+  .magnet-card .eyebrow{color:#9CD3B4}
+  .magnet-card ul{list-style:none;margin-top:18px}
+  .magnet-card li{padding:10px 0;border-bottom:1px solid #33302A;font-size:15.5px;color:#DDD9CF}
+  .magnet-card li::before{content:"→";color:#9CD3B4;margin-right:10px}
+
+  /* Pricing */
+  .pricing{padding:72px 0;border-top:1px solid var(--border)}
+  .price-row{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;align-items:stretch}
+  .plan{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:30px;display:flex;flex-direction:column}
+  .plan.featured{border:2px solid var(--accent);position:relative}
+  .plan.featured .tag{position:absolute;top:-13px;left:24px;background:var(--accent);color:var(--accent-ink);font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:4px 12px;border-radius:999px}
+  .plan h3{font-size:22px;font-family:var(--font-body);font-weight:600}
+  .plan .price{font-family:var(--font-display);font-size:42px;margin:12px 0 4px}
+  .plan .price small{font-size:16px;font-family:var(--font-body);color:var(--muted)}
+  .plan .price .from{font-size:14px;color:var(--muted);font-family:var(--font-body);display:block;font-weight:400}
+  .plan ul{list-style:none;margin:18px 0 24px;flex:1}
+  .plan li{padding:8px 0;font-size:15px;color:var(--muted);border-bottom:1px dashed var(--border)}
+  .plan .btn{text-align:center}
+  .plan .btn.ghost{background:transparent;color:var(--ink);border:1.5px solid var(--ink)}
+  .plan .btn.ghost:hover{background:var(--ink);color:var(--bg)}
+  .draft-note{font-size:13px;color:var(--muted);margin-top:16px}
+
+  /* FAQ */
+  .faq{padding:72px 0;border-top:1px solid var(--border)}
+  .faq-grid{display:grid;grid-template-columns:.8fr 1.2fr;gap:48px}
+  details{border-bottom:1px solid var(--border);padding:18px 0}
+  summary{cursor:pointer;font-weight:600;font-size:16.5px;list-style:none;display:flex;justify-content:space-between;align-items:center}
+  summary::after{content:"+";font-family:var(--font-display);font-size:22px;color:var(--accent)}
+  details[open] summary::after{content:"–"}
+  details p{margin-top:10px;color:var(--muted);font-size:15.5px;max-width:38em}
+
+  /* Final CTA */
+  .final{padding:88px 0;border-top:1px solid var(--border);text-align:left}
+  .final h2{font-size:clamp(34px,5vw,52px);margin-bottom:16px}
+  .final .signup{margin:28px 0 0}
+
+  footer{padding:40px 0;border-top:1px solid var(--border);color:var(--muted);font-size:14px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
+
+  /* Form status */
+  .form-status{margin-top:14px;font-size:14.5px;font-weight:500;display:none}
+  .form-status.ok{display:block;color:var(--accent)}
+  .form-status.err{display:block;color:#A33D2F}
+
+  @media(max-width:820px){
+    .hero{grid-template-columns:1fr;padding-top:56px}
+    .hero-side{border-left:none;padding-left:0;display:flex;gap:32px;border-top:1px solid var(--border);padding-top:24px}
+    .hero-side .stat{margin-bottom:0}
+    .work-grid,.steps,.price-row,.faq-grid,.magnet-card{grid-template-columns:1fr}
+    .step + .step{padding-left:0}
+    .step{border-top:none;border-left:2px solid var(--ink);padding-left:20px}
+    .magnet-card{padding:36px 28px}
+    .signup{flex-direction:column}
+    td,th{padding:12px 10px;font-size:14px}
+  }
+  @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a class="logo" href="#">Kyle Monk <em>· Web Apps</em></a>
+    <a class="nav-cta" href="#start">Get a free scoping call</a>
+  </div>
+</nav>
+
+<header class="wrap hero" id="top">
+  <div>
+    <span class="eyebrow">Websites &amp; web apps — built solo, built fast</span>
+    <h1>Agency-grade builds. <em>Days, not months.</em> No agency markup.</h1>
+    <p class="lede">You get the same quality an agency charges five figures for — modern, fast, polished — built by one person who actually writes the code. No account managers, no juniors, no bloat.</p>
+    <form class="signup" data-form="lead">
+      <input type="email" name="email" placeholder="you@company.com" required aria-label="Email address">
+      <button class="btn" type="submit">Get a free site audit</button>
+    </form>
+    <p class="micro">Free 10-point audit of your current site + a no-obligation quote. No spam, ever.</p>
+    <p class="form-status" data-status></p>
+  </div>
+  <aside class="hero-side">
+    <div class="stat"><b>Days</b><span>typical turnaround, not months of agency cycles</span></div>
+    <div class="stat"><b>~70% less</b><span>than comparable agency quotes — no overheads</span></div>
+    <div class="stat"><b>1 person</b><span>you talk to the person building your product</span></div>
+  </aside>
+</header>
+
+<section class="wrap portfolio" id="work">
+  <div class="section-head">
+    <h2>Built, shipped, live.</h2>
+    <p>Real sites, built end-to-end: design, build, deploy. <em style="color:var(--muted)">Replace these placeholders with your pre-built sites and links.</em></p>
+  </div>
+  <div class="work-grid">
+    <a class="work" href="#work">
+      <div class="thumb">Holiday home site — screenshot</div>
+      <div class="meta"><b>Holiday Home Rental Site</b><span>Booking-ready marketing site · design → deploy</span></div>
+    </a>
+    <a class="work" href="#work">
+      <div class="thumb">Personal site — screenshot</div>
+      <div class="meta"><b>Personal Portfolio Site</b><span>Fast, responsive, custom build</span></div>
+    </a>
+    <a class="work" href="#work">
+      <div class="thumb">Your next project</div>
+      <div class="meta"><b>This slot is yours</b><span>Your site could be live within the week</span></div>
+    </a>
+  </div>
+</section>
+
+<section class="wrap compare">
+  <div class="section-head">
+    <h2>The honest comparison.</h2>
+    <p>Same output. Different overheads.</p>
+  </div>
+  <table>
+    <thead>
+      <tr><th></th><th>Typical agency</th><th>DIY site builder</th><th>Working with me</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Timeline</td><td>2–4 months</td><td>A weekend (that stretches to months)</td><td class="us">Days to ~2 weeks</td></tr>
+      <tr><td>Typical cost</td><td>£10k–£50k+</td><td>“Free” + your weekends</td><td class="us">Fraction of agency rates</td></tr>
+      <tr><td>Who builds it</td><td>Whoever's free that week</td><td>You, after YouTube tutorials</td><td class="us">The person you're talking to</td></tr>
+      <tr><td>Revisions</td><td>Billed hourly</td><td>Rebuild it yourself</td><td class="us">Included, agreed upfront</td></tr>
+      <tr><td>Result</td><td>Good, eventually</td><td>Looks like a template</td><td class="us">Custom, fast, shipped</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section class="wrap process">
+  <div class="section-head">
+    <h2>How it works.</h2>
+    <p>No discovery theatre. Three steps from first message to live site.</p>
+  </div>
+  <div class="steps">
+    <div class="step">
+      <h3>Scoping call</h3>
+      <p>15 minutes. You tell me what it needs to do, I tell you exactly what it'll cost and how long it'll take — in writing.</p>
+      <span class="dur">Day 0 · free</span>
+    </div>
+    <div class="step">
+      <h3>Build sprint</h3>
+      <p>I design and build the whole thing, checking in with real progress — not status meetings. You see it live as it comes together.</p>
+      <span class="dur">Days 1–7ish</span>
+    </div>
+    <div class="step">
+      <h3>Ship it</h3>
+      <p>Deployed, domain connected, analytics in, handed over with everything documented. One round of revisions included.</p>
+      <span class="dur">Launch day</span>
+    </div>
+  </div>
+</section>
+
+<section class="wrap magnet" id="audit">
+  <div class="magnet-card">
+    <div>
+      <span class="eyebrow">Free — no strings</span>
+      <h2>Not ready to talk? Start with a <em>free 10-point site audit.</em></h2>
+      <p>Send me your current site (or your competitor's) and within 48 hours you'll get back a short, specific teardown — what's slow, what's confusing visitors, what to fix first. Useful whether or not you ever hire me.</p>
+    </div>
+    <ul>
+      <li>Speed &amp; performance breakdown</li>
+      <li>Mobile experience check</li>
+      <li>Conversion blockers, ranked</li>
+      <li>Quick wins you can do yourself</li>
+    </ul>
+  </div>
+</section>
+
+<section class="wrap pricing" id="pricing">
+  <div class="section-head">
+    <h2>Ballpark pricing.</h2>
+    <p>Every project gets a fixed quote after the scoping call. These are honest starting points. <em style="color:var(--muted)">⚠ Draft numbers — set your real prices before launch.</em></p>
+  </div>
+  <div class="price-row">
+    <div class="plan">
+      <h3>Landing Page</h3>
+      <div class="price"><span class="from">from</span>£750</div>
+      <ul>
+        <li>One page, conversion-focused</li>
+        <li>Custom design (no templates)</li>
+        <li>Mobile-first, fast scores</li>
+        <li>Deployed + analytics</li>
+      </ul>
+      <a class="btn ghost" href="#start">Start with this</a>
+    </div>
+    <div class="plan featured">
+      <span class="tag">Most popular</span>
+      <h3>Full Site</h3>
+      <div class="price"><span class="from">from</span>£1,800</div>
+      <ul>
+        <li>Up to 6 pages</li>
+        <li>Everything in Landing Page</li>
+        <li>Booking / contact flows</li>
+        <li>SEO basics + handover docs</li>
+      </ul>
+      <a class="btn" href="#start">Book a scoping call</a>
+    </div>
+    <div class="plan">
+      <h3>Web App</h3>
+      <div class="price"><span class="from">from</span>£4,000</div>
+      <ul>
+        <li>Logins, dashboards, data</li>
+        <li>API integrations</li>
+        <li>Staged rollout plan</li>
+        <li>Post-launch support window</li>
+      </ul>
+      <a class="btn ghost" href="#start">Scope it with me</a>
+    </div>
+  </div>
+  <p class="draft-note">Fixed quotes, agreed in writing before any work starts. 50% deposit to begin, balance on launch.</p>
+</section>
+
+<section class="wrap faq">
+  <div class="faq-grid">
+    <div>
+      <h2>Questions, answered.</h2>
+      <p style="color:var(--muted);margin-top:12px">Anything else — just ask on the call. Blunt answers guaranteed.</p>
+    </div>
+    <div>
+      <details>
+        <summary>How can you be this much cheaper than an agency?</summary>
+        <p>No office, no account managers, no sales team, no junior developers learning on your budget. One experienced person, low overheads, passed to you.</p>
+      </details>
+      <details>
+        <summary>"Days" sounds too good to be true.</summary>
+        <p>For marketing sites and straightforward web apps, it isn't. Agencies are slow mostly because of process, not the work itself. If your project genuinely needs longer, I'll say so on the call.</p>
+      </details>
+      <details>
+        <summary>What if I need changes after launch?</summary>
+        <p>One revision round is included with every build. After that, small tweaks are quick and cheap — or I hand over everything documented so any developer can pick it up.</p>
+      </details>
+      <details>
+        <summary>Do you do ongoing work?</summary>
+        <p>Happy to. Retainers or per-piece — decided project by project, no lock-in contracts.</p>
+      </details>
+      <details>
+        <summary>Who owns the code and site?</summary>
+        <p>You do, completely, from day one. Domain, hosting, repo — all in your name.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<section class="wrap final" id="start">
+  <span class="eyebrow">One message away</span>
+  <h2>Your site could be live this time next week.</h2>
+  <p style="color:var(--muted);max-width:34em">Drop your email — you'll get the free audit offer and a booking link for a 15-minute scoping call. Worst case, you leave the call with a free plan and a number.</p>
+  <form class="signup" data-form="lead">
+    <input type="email" name="email" placeholder="you@company.com" required aria-label="Email address">
+    <button class="btn" type="submit">Start the conversation</button>
+  </form>
+  <p class="form-status" data-status></p>
+  <p class="micro">Or book directly: <a href="#" data-booking style="color:var(--accent);font-weight:600">15-min scoping call →</a> <em style="color:var(--muted)">(link set in config — see README)</em></p>
+</section>
+
+<footer class="wrap">
+  <span>Kyle Monk · Web apps, built fast</span>
+  <span><a href="#top">Back to top ↑</a></span>
+</footer>
+
+<script>
+/* ============================================================
+   LEAD CAPTURE — wire-up point.
+   1) DEMO MODE (default): stores leads in localStorage so you can
+      test the full flow before wiring a backend.
+   2) REAL MODE: set FORM_ENDPOINT to your Formspree/Netlify Forms/
+      Basin URL and leads post there for real.
+   ============================================================ */
+const FORM_ENDPOINT = ""; // e.g. "https://formspree.io/f/xxxxxxx"
+const REDIRECT_URL  = "thank-you.html";
+
+document.querySelectorAll('form[data-form="lead"]').forEach(form => {
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const email = form.querySelector("input[name=email]").value.trim();
+    const status = form.parentElement.querySelector("[data-status]") || form.querySelector("[data-status]");
+    const btn = form.querySelector("button");
+    if (!email || !email.includes("@")) { show(status, "Please enter a valid email.", "err"); return; }
+
+    btn.disabled = true; btn.textContent = "Sending…";
+    try {
+      if (FORM_ENDPOINT) {
+        const res = await fetch(FORM_ENDPOINT, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", "Accept": "application/json" },
+          body: JSON.stringify({ email, source: "landing-page", ts: new Date().toISOString() })
+        });
+        if (!res.ok) throw new Error("backend " + res.status);
+      } else {
+        // Demo mode: keep the lead locally so the flow is testable end-to-end
+        const leads = JSON.parse(localStorage.getItem("leads") || "[]");
+        leads.push({ email, source: "landing-page", ts: new Date().toISOString() });
+        localStorage.setItem("leads", JSON.stringify(leads));
+        await new Promise(r => setTimeout(r, 400));
+      }
+      window.location.href = REDIRECT_URL + "?email=" + encodeURIComponent(email);
+    } catch (err) {
+      show(status, "Something went wrong — email me directly instead.", "err");
+      btn.disabled = false; btn.textContent = "Try again";
+    }
+  });
+});
+function show(el, msg, cls){ if(el){ el.textContent = msg; el.className = "form-status " + cls; } }
+</script>
+</body>
+</html>
