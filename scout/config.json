@@ -1,0 +1,17 @@
+{
+  "niche": "holiday cottages",
+  "area": "Cornwall",
+  "areas": [
+    "Cornwall", "Devon", "Northumberland", "Lake District",
+    "Norfolk", "Pembrokeshire", "Yorkshire Dales", "Suffolk coast"
+  ],
+  "niches": [
+    "holiday cottages",
+    "wedding venues",
+    "self catering accommodation",
+    "boutique b&b"
+  ],
+  "limit": 8,
+  "min_score": 5,
+  "_schedule": "cron daily 07:00 — scout_daily.py rotates areas/niches, drops drafts in out/, you review over coffee"
+}

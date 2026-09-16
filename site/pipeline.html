@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pipeline — Kyle Monk Web Apps</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#FAF8F4; --surface:#F1EEE6; --ink:#191713; --muted:#6B655B; --border:#DDD8CC;
+    --accent:#1D5C3F; --accent-ink:#F4F9F5; --accent-soft:#E4EFE8;
+    --warn:#A33D2F; --warn-soft:#F6E8E5;
+    --gold:#8A6D1A; --gold-soft:#F5EFDA;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--bg);color:var(--ink);font-family:'Space Grotesk',sans-serif;font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased}
+  header{position:sticky;top:0;z-index:20;background:rgba(250,248,244,.94);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:14px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+  h1{font-family:'Instrument Serif',serif;font-weight:400;font-size:24px}
+  h1 em{font-style:italic;color:var(--accent)}
+  .stats{display:flex;gap:22px;flex-wrap:wrap}
+  .stat b{display:block;font-family:'Instrument Serif',serif;font-size:22px;font-weight:400}
+  .stat span{font-size:12px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
+  .actions{display:flex;gap:8px}
+  .btn{padding:9px 16px;border-radius:9px;border:1.5px solid var(--ink);background:transparent;color:var(--ink);font:inherit;font-weight:600;cursor:pointer;transition:.15s}
+  .btn:hover{background:var(--ink);color:var(--bg)}
+  .btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+  .btn.primary:hover{background:#174A33}
+
+  .board{display:grid;grid-template-columns:repeat(7,minmax(215px,1fr));gap:14px;padding:20px 24px;overflow-x:auto;align-items:start;min-height:calc(100vh - 140px)}
+  .col{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:10px;min-height:300px}
+  .col.drop-target{outline:2px dashed var(--accent);outline-offset:-4px}
+  .col-head{display:flex;justify-content:space-between;align-items:baseline;padding:4px 6px 10px}
+  .col-head h2{font-size:12.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:600}
+  .col-head .count{font-family:'Instrument Serif',serif;font-size:17px;color:var(--ink)}
+  .col.won{background:var(--accent-soft)} .col.lost{background:#EFEDE7}
+  .cards{display:flex;flex-direction:column;gap:8px}
+  .card{background:#fff;border:1px solid var(--border);border-radius:10px;padding:12px;cursor:grab;transition:box-shadow .15s}
+  .card:hover{box-shadow:0 2px 10px rgba(25,23,19,.1)}
+  .card.dragging{opacity:.45;cursor:grabbing}
+  .card b{display:block;font-size:15px;margin-bottom:2px}
+  .card .biz{font-size:13px;color:var(--muted);display:block;margin-bottom:8px}
+  .card .row{display:flex;justify-content:space-between;align-items:center;font-size:12.5px}
+  .card .val{font-family:'Instrument Serif',serif;font-size:16px}
+  .due{padding:2px 8px;border-radius:999px;font-weight:600;font-size:11.5px}
+  .due.today{background:var(--gold-soft);color:var(--gold)}
+  .due.over{background:var(--warn-soft);color:var(--warn)}
+  .due.ok{background:#EDEBE4;color:var(--muted)}
+  .card .notes{font-size:12.5px;color:var(--muted);margin-top:8px;border-top:1px dashed var(--border);padding-top:6px}
+  .card .x{float:right;color:var(--muted);border:none;background:none;cursor:pointer;font-size:15px;line-height:1;padding:0 2px}
+  .card .x:hover{color:var(--warn)}
+
+  /* Modal */
+  .overlay{position:fixed;inset:0;background:rgba(25,23,19,.45);display:none;align-items:center;justify-content:center;z-index:50;padding:20px}
+  .overlay.open{display:flex}
+  .modal{background:#fff;border-radius:14px;padding:28px;width:100%;max-width:420px}
+  .modal h3{font-family:'Instrument Serif',serif;font-weight:400;font-size:24px;margin-bottom:18px}
+  .modal label{font-size:12px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);font-weight:600;display:block;margin:12px 0 5px}
+  .modal input,.modal select,.modal textarea{width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:8px;font:inherit;background:#fff}
+  .modal input:focus,.modal select:focus,.modal textarea:focus{outline:none;border-color:var(--accent)}
+  .modal textarea{resize:vertical;min-height:56px}
+  .modal .actions{display:flex;justify-content:flex-end;gap:8px;margin-top:20px}
+  .empty-hint{font-size:12.5px;color:var(--muted);text-align:center;padding:18px 6px;border:1px dashed var(--border);border-radius:8px;margin:2px}
+  footer{padding:10px 24px 26px;color:var(--muted);font-size:12.5px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+  @media(max-width:900px){ .stats{order:3;width:100%} }
+  @media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Pipeline <em>· web apps</em></h1>
+  <div class="stats">
+    <div class="stat"><b id="st-total">0</b><span>leads</span></div>
+    <div class="stat"><b id="st-value">£0</b><span>open value</span></div>
+    <div class="stat"><b id="st-won">£0</b><span>won</span></div>
+    <div class="stat"><b id="st-due">0</b><span>due follow-ups</span></div>
+  </div>
+  <div class="actions">
+    <button class="btn" id="btn-export">Export CSV</button>
+    <label class="btn" style="margin:0">Import CSV<input type="file" id="file-import" accept=".csv" hidden></label>
+    <button class="btn primary" id="btn-add">+ Add lead</button>
+  </div>
+</header>
+
+<div class="board" id="board"></div>
+
+<footer>
+  <span>Data lives in this browser (localStorage). Export CSV to back up or move machines.</span>
+  <span id="persist-note"></span>
+</footer>
+
+<div class="overlay" id="overlay">
+  <div class="modal">
+    <h3 id="modal-title">New lead</h3>
+    <label>Name</label><input id="f-name" placeholder="Jane Smith">
+    <label>Business</label><input id="f-biz" placeholder="The Corner Café">
+    <label>Website</label><input id="f-url" placeholder="cornercafe.co.uk">
+    <label>Email / contact</label><input id="f-email" placeholder="jane@cornercafe.co.uk">
+    <label>Est. value (£)</label><input id="f-value" type="number" placeholder="1800">
+    <label>Stage</label>
+    <select id="f-stage">
+      <option value="prospect">1 · Prospect</option>
+      <option value="contacted">2 · Contacted</option>
+      <option value="audit">3 · Audit requested/sent</option>
+      <option value="call">4 · Call booked</option>
+      <option value="quoted">5 · Quoted</option>
+      <option value="won">6 · Won 🎉</option>
+      <option value="lost">✕ Lost</option>
+    </select>
+    <label>Next follow-up</label><input id="f-due" type="date">
+    <label>Notes</label><textarea id="f-notes" placeholder="Site is a 2014 Wix template, menu not mobile-readable…"></textarea>
+    <div class="actions">
+      <button class="btn" id="btn-cancel">Cancel</button>
+      <button class="btn primary" id="btn-save">Save</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ============ Pipeline board — localStorage CRM ============ */
+const STAGES = [
+  {id:"prospect",  name:"1 · Prospect"},
+  {id:"contacted", name:"2 · Contacted"},
+  {id:"audit",     name:"3 · Audit"},
+  {id:"call",      name:"4 · Call booked"},
+  {id:"quoted",    name:"5 · Quoted"},
+  {id:"won",       name:"6 · Won", cls:"won"},
+  {id:"lost",      name:"✕ Lost", cls:"lost"},
+];
+const KEY = "pipeline_leads";
+let leads = JSON.parse(localStorage.getItem(KEY) || "[]");
+let editingId = null;
+
+const save = () => localStorage.setItem(KEY, JSON.stringify(leads));
+const todayStr = () => new Date().toISOString().slice(0,10);
+
+function dueMeta(due){
+  if(!due) return null;
+  const t = todayStr();
+  if(due < t) return {cls:"over", label:"overdue"};
+  if(due === t) return {cls:"today", label:"today"};
+  const d = new Date(due + "T00:00");
+  return {cls:"ok", label:d.toLocaleDateString("en-GB",{day:"numeric",month:"short"})};
+}
+
+function render(){
+  const board = document.getElementById("board");
+  board.innerHTML = "";
+  let openVal = 0, wonVal = 0, dueN = 0;
+  STAGES.forEach(s => {
+    const colLeads = leads.filter(l => (l.stage || "prospect") === s.id);
+    const col = document.createElement("div");
+    col.className = "col " + (s.cls || "");
+    col.dataset.stage = s.id;
+    const head = document.createElement("div");
+    head.className = "col-head";
+    head.innerHTML = `<h2>${s.name}</h2><span class="count">${colLeads.length}</span>`;
+    col.appendChild(head);
+    const wrap = document.createElement("div");
+    wrap.className = "cards";
+    if(!colLeads.length) wrap.innerHTML = `<div class="empty-hint">drop here</div>`;
+    colLeads.forEach(l => {
+      if(!["won","lost"].includes(s.id)) openVal += (+l.value || 0);
+      if(s.id === "won") wonVal += (+l.value || 0);
+      const dm = dueMeta(l.due);
+      if(dm && dm.cls !== "ok" && !["won","lost"].includes(s.id)) dueN++;
+      const card = document.createElement("div");
+      card.className = "card"; card.draggable = true; card.dataset.id = l.id;
+      card.innerHTML = `
+        <button class="x" title="Delete">×</button>
+        <b>${esc(l.name)}</b>
+        <span class="biz">${esc(l.biz)}${l.url ? ` · <a href="${esc(l.url)}" target="_blank" rel="noopener" style="color:var(--accent)">site</a>` : ""}</span>
+        <div class="row">
+          <span class="val">${l.value ? "£" + (+l.value).toLocaleString() : "—"}</span>
+          ${dm ? `<span class="due ${dm.cls}">${dm.label}</span>` : ""}
+        </div>
+        ${l.notes ? `<div class="notes">${esc(l.notes)}</div>` : ""}`;
+      card.addEventListener("dragstart", e => { e.dataTransfer.setData("text/plain", l.id); card.classList.add("dragging"); });
+      card.addEventListener("dragend", () => card.classList.remove("dragging"));
+      card.querySelector(".x").addEventListener("click", e => { e.stopPropagation(); if(confirm("Delete this lead?")){ leads = leads.filter(x => x.id !== l.id); save(); render(); }});
+      card.addEventListener("click", e => { if(e.target.classList.contains("x")) return; openModal(l); });
+      wrap.appendChild(card);
+    });
+    col.appendChild(wrap);
+    col.addEventListener("dragover", e => { e.preventDefault(); col.classList.add("drop-target"); });
+    col.addEventListener("dragleave", () => col.classList.remove("drop-target"));
+    col.addEventListener("drop", e => {
+      e.preventDefault(); col.classList.remove("drop-target");
+      const id = e.dataTransfer.getData("text/plain");
+      const lead = leads.find(x => x.id === id);
+      if(lead){ lead.stage = s.id; save(); render(); }
+    });
+    board.appendChild(col);
+  });
+  document.getElementById("st-total").textContent = leads.length;
+  document.getElementById("st-value").textContent = "£" + openVal.toLocaleString();
+  document.getElementById("st-won").textContent = "£" + wonVal.toLocaleString();
+  document.getElementById("st-due").textContent = dueN;
+  document.getElementById("persist-note").textContent = `${leads.length} leads saved locally · ${new Date().toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit"})}`;
+}
+
+function esc(s){ return String(s||"").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
+
+/* Modal */
+const overlay = document.getElementById("overlay");
+function openModal(lead){
+  editingId = lead ? lead.id : null;
+  document.getElementById("modal-title").textContent = lead ? "Edit lead" : "New lead";
+  document.getElementById("f-name").value = lead?.name || "";
+  document.getElementById("f-biz").value = lead?.biz || "";
+  document.getElementById("f-url").value = lead?.url || "";
+  document.getElementById("f-email").value = lead?.email || "";
+  document.getElementById("f-value").value = lead?.value || "";
+  document.getElementById("f-stage").value = lead?.stage || "prospect";
+  document.getElementById("f-due").value = lead?.due || "";
+  document.getElementById("f-notes").value = lead?.notes || "";
+  overlay.classList.add("open");
+  document.getElementById("f-name").focus();
+}
+const closeModal = () => overlay.classList.remove("open");
+document.getElementById("btn-add").addEventListener("click", () => openModal(null));
+document.getElementById("btn-cancel").addEventListener("click", closeModal);
+overlay.addEventListener("click", e => { if(e.target === overlay) closeModal(); });
+document.getElementById("btn-save").addEventListener("click", () => {
+  const data = {
+    id: editingId || (Date.now().toString(36) + Math.random().toString(36).slice(2,6)),
+    name: document.getElementById("f-name").value.trim(),
+    biz: document.getElementById("f-biz").value.trim(),
+    url: document.getElementById("f-url").value.trim(),
+    email: document.getElementById("f-email").value.trim(),
+    value: +document.getElementById("f-value").value || 0,
+    stage: document.getElementById("f-stage").value,
+    due: document.getElementById("f-due").value,
+    notes: document.getElementById("f-notes").value.trim(),
+    updated: new Date().toISOString(),
+  };
+  if(!data.name && !data.biz){ alert("Give the lead a name or business."); return; }
+  leads = leads.filter(l => l.id !== data.id); leads.push(data);
+  save(); render(); closeModal();
+});
+
+/* CSV export / import */
+document.getElementById("btn-export").addEventListener("click", () => {
+  const cols = ["name","biz","url","email","value","stage","due","notes","updated"];
+  const csv = [cols.join(",")].concat(leads.map(l =>
+    cols.map(c => `"${String(l[c] ?? "").replace(/"/g,'""')}"`).join(",")
+  )).join("\n");
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([csv], {type:"text/csv"}));
+  a.download = `pipeline-${todayStr()}.csv`; a.click();
+});
+document.getElementById("file-import").addEventListener("change", e => {
+  const file = e.target.files[0]; if(!file) return;
+  const r = new FileReader();
+  r.onload = () => {
+    const lines = String(r.result).split(/\r?\n/).filter(Boolean);
+    const cols = lines[0].split(",");
+    const imported = lines.slice(1).map(line => {
+      const vals = line.match(/("([^"]|"")*"|[^,]*)/g)?.filter((_,i)=>i%2===0) || [];
+      const o = {id: Date.now().toString(36) + Math.random().toString(36).slice(2,6)};
+      cols.forEach((c,i) => { if(c==="value") o.value = +vals[i]||0; else o[c] = (vals[i]||"").replace(/^"|"$/g,"").replace(/""/g,'"'); });
+      return o;
+    });
+    const existing = new Set(leads.map(l => (l.biz + "|" + l.email).toLowerCase()));
+    const fresh = imported.filter(l => !existing.has((l.biz + "|" + l.email).toLowerCase()));
+    leads = leads.concat(fresh); save(); render();
+    alert(`Imported ${fresh.length} new leads (${imported.length - fresh.length} duplicates skipped).`);
+  };
+  r.readAsText(file); e.target.value = "";
+});
+
+render();
+</script>
+</body>
+</html>
