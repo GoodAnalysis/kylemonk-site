@@ -1,6 +1,6 @@
 # Pipeline — Operating Manual
 
-The board (`site/pipeline.html`) is the tool. This is how you run it.
+The board (`pipeline.html`) is the tool. This is how you run it.
 Your only job: **keep leads moving right.** A lead without a next action is a dead lead.
 
 ## Stages & exit criteria

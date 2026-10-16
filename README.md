@@ -5,13 +5,21 @@ The full system: **traffic → landing page → free audit (lead magnet) → 6-e
 ## What's in here
 
 ```
-sales-funnel/
-├── site/
-│   ├── index.html        Landing page (leads capture wired, demo mode)
-│   └── thank-you.html    Post-signup page (sets expectations, booking CTA)
+kylemonk-site/
+├── index.html            Landing page (leads capture wired, demo mode)
+├── thank-you.html        Post-signup page (sets expectations, booking CTA)
+├── pipeline.html         Pipeline board (how to run it: PIPELINE.md)
+├── PIPELINE.md           Pipeline operating manual
 ├── emails/
 │   └── sequence.md       6-email nurture sequence, fully written
+├── scout/
+│   ├── scout.py          Finds and pre-qualifies leads, drafts first-touch emails
+│   └── config.json       Niches, areas, result limit and minimum score
 └── README.md             This file
+```
+
+The site pages sit at the repo root because GitHub Pages serves `main` from `/`.
+Scout's output (`scout/out/`, lead CSVs) is gitignored: it holds real business data.
 ```
 
 ## The funnel logic
@@ -30,12 +38,12 @@ The audit is delivered manually by you — that's intentional. It qualifies the 
 
 ## Step 1 — Set your real details (10 min, before anything else)
 
-In `site/index.html`:
+In `index.html`:
 - [ ] Replace portfolio placeholders (holiday home site, personal site) with **real screenshots + links** — this is your #1 conversion driver
 - [ ] Set real prices in the pricing section (draft numbers are marked with ⚠)
 - [ ] Swap "Kyle Monk" title/copy if you want different positioning
 
-In `site/thank-you.html` + `index.html`:
+In `thank-you.html` + `index.html`:
 - [ ] Set `BOOKING_URL` / `FORM_ENDPOINT` (next steps below)
 - [ ] Replace `hello@yourdomain.com` with your real email
 
@@ -58,8 +66,8 @@ In `site/thank-you.html` + `index.html`:
 
 ## Step 4 — Deploy (5 min, free)
 
-**[Netlify Drop](https://app.netlify.com/drop)** — drag the `site/` folder in. Done. Free HTTPS + custom domain support.
-Then connect your domain (e.g. `kylemonk.dev` or your brand domain) in Netlify's domain settings.
+Live on **GitHub Pages**, served from the root of `main`: https://goodanalysis.github.io/kylemonk-site/
+Every push to `main` redeploys it, with free HTTPS. To use your own domain (e.g. `kylemonk.dev`), add it under the repo's Settings → Pages.
 
 ## Step 5 — Stripe checkout for deposits (15 min, optional)
 
@@ -83,7 +91,7 @@ With no audience, pick **two** channels max. Ranked for a solo web developer:
 
 ## Testing the funnel locally
 
-Open `site/index.html` in a browser — it runs in **demo mode** (leads saved to localStorage, no backend). Submit the form → redirected to thank-you page → inspect leads with browser DevTools → Application → Local Storage → `leads`.
+Open `index.html` in a browser: it runs in **demo mode** (leads saved to localStorage, no backend). Submit the form → redirected to thank-you page → inspect leads with browser DevTools → Application → Local Storage → `leads`.
 
 ## Metrics to watch
 
